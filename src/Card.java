@@ -1,19 +1,25 @@
 import java.util.Map;
+import java.util.HashMap;
 public class Card {
     
-    private static final Map<String, Integer> specialRankToPoints = Map.of(
-        "Ace", 11,
-        "King", 10,
-        "Queen", 10,
-        "Jack", 10
-    );
+    private static Map<String, Integer> specialRankToPoints = new HashMap<>();
+
+    static {
+        specialRankToPoints.put("Ace", 11);
+        specialRankToPoints.put("King", 10);
+        specialRankToPoints.put("Queen", 10);
+        specialRankToPoints.put("Jack", 10);
+    }
 
     private String rank;
     private String suit;
-    private int pointValue;
     private boolean hidden;
 
-    public Card(String rank, String suit) { this(rank, suit, false); }
+    private int pointValue;
+
+    public Card(String rank, String suit) { 
+        this(rank, suit, false); 
+    }
 
     public Card(String rank, String suit, boolean hidden) {
         this.rank = rank;
@@ -28,46 +34,39 @@ public class Card {
     }
 
     public String getRank() {
-        return this.rank;
+        return rank;
     }
 
     public String getSuit() {
-        return this.suit;
+        return suit;
     }
 
     public boolean isHidden() {
-        return this.hidden;
-    }
-
-    public void flip() {
-        this.hidden = !this.hidden;
-    }
-
-    public boolean isAce() {
-        return this.rank == "Ace";
+        return hidden;
     }
 
     public int getPointValue() {
-        return this.pointValue;
+        return pointValue;
     }
 
+    public void flip() {
+        hidden = !hidden;
+    }
+
+    public boolean isAce() {
+        return rank.equals("Ace");
+    }
+
+    @Override
     public String toString() {
-        String strRepr;
-
-        if (this.isHidden()) {
-            strRepr = "?";
+        if (isHidden()) {
+            return "?";
         } else {
-            strRepr = String.format("%s of %s", this.rank, this.suit);
+            if (specialRankToPoints.containsKey(rank)) {
+                return String.format("%s%s", rank.substring(0, 1), suit.substring(0, 1));
+            } else {
+                return String.format("%s%s", rank, suit.substring(0, 1));
+            }
         }
-        return strRepr;
     }
-
-    // Test client, delete later
-    public static void main(String[] args) {
-        Card test1 = new Card("Ace", "Hearts");
-        Card test2 = new Card("6", "Clubs", false);
-        System.out.println(test1);
-        System.out.println(test2);
-    }
-
 }
